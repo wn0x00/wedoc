@@ -10,9 +10,16 @@ if __name__ =="__main__":
     corpid = "xxxxxxxxxxxxx"
     corpsecret = "xxxxxxxxxxxxx"
 
+    docid = "xxxxxxxxxxxxxxxxxxxxxx"
     client = WedocClient(corpid, corpsecret)
-    res = client.get_crop_access_token()
-    client.doc.create_doc()
+    res = client.access_token
+    print(res)
+    doc_type = 4
+    doc_name = "物料"
+    res = client.doc.create_doc(doc_name, doc_type)
+    print(res)
+    res = client.wb.get_sheet_properties(docid)
+    print(res)
 
 ```
 
