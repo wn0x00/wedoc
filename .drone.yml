@@ -17,10 +17,6 @@ steps:
       - poetry export -f requirements.txt --output requirements.txt --without-hashes --with dev
       - pip install -r requirements.txt -i https://pypi.douban.com/simple
       - mkdocs build
-  - name: build-dist
-    image: python:18
-    commands:
-      - yarn build
       - tar -czvf wedoc.tar.gz ./site
   - name: scp files
     image: appleboy/drone-scp
@@ -47,8 +43,8 @@ steps:
       key:
         from_secret: ssh_key
       script:
-        - cd  /data/www/wedoc.tar.gz
-        - tar -xzf wedoc.tar.gz
+        - cd /data/www/
+        - tar xf wedoc.tar.gz
         - rm -rf wedoc.tar.gz
   - name: dingtalk
     image: lddsb/drone-dingtalk-message
