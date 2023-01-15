@@ -1,10 +1,19 @@
 [tool.poetry]
 name = "wedoc"
-version = "0.1.2"
-description = ""
+version = "0.1.3"
+description = "企业微信文档接口, 包括文档的创建, 删除, 以及表格的操作"
 authors = ["wn <320753691@qq.com>"]
 readme = "README.md"
+license = "MIT"
 packages = [{include = "wedoc"}]
+homepage = "https://wedoc.woni.link/"
+repository = "https://github.com/wn0x00/wedoc"
+documentation = "https://wedoc.woni.link/"
+keywords = ["wework", "sheet"]
+
+
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/wn0x00/wedoc/issues"
 
 [tool.poetry.dependencies]
 python = "^3.10"
