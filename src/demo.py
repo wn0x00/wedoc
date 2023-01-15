@@ -2,26 +2,11 @@ import requests
 import json
 
 
-def get_crop_access_token():
-    corpid = "ww0c0936b1528ad42b"
-    corpsecret = "U8BdEfvnySFcJE5PvLCOfd1dhj4-hawQU8I4f5vXVhM"
+def get_crop_access_token(corpid, corpsecret):
     url = f"https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid={corpid}&corpsecret={corpsecret}"
     payload = {}
     headers = {}
     response = requests.request("GET", url, headers=headers, data=payload)
-    return response.json()
-
-
-def get_ticket(type):
-    payload = {}
-    headers = {}
-    response = get_crop_access_token()
-    if type == "corp":
-        ticket_url = f"https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token={response.json().get('access_token')}"
-    else:
-        ticket_url = f"https://qyapi.weixin.qq.com/cgi-bin/ticket/get?access_token={response.json().get('access_token')}&type=agent_config"
-    response = requests.request("GET", ticket_url, headers=headers, data=payload)
-    # print(response.json())
     return response.json()
 
 
@@ -47,7 +32,9 @@ def create_doc(access_token):
 
 
 if __name__ == "__main__":
-    res = get_crop_access_token()
+    corpid = "ww0c0936b1528ad42b"
+    corpsecret = "U8BdEfvnySFcJE5PvLCOfd1dhj4-hawQU8I4f5vXVhM"
+    res = get_crop_access_token(corpid, corpsecret)
     print(res.get("access_token"))
     sheet_id = "dcFaoW-UCcjABuh7L9JkKVLnZfQMlYpLiWtyDyCj_mh8jOzWu5Io-gDbTWGzyAX-WUVZ4zbvZJbSbEYCdniuFaHw"
     # res = get_sheet_info(res.get("access_token"), sheet_id)
