@@ -10,15 +10,15 @@ steps:
     settings:
       depth: 10
       skip_verify: true
-  - name:
-    image: python
+  - name: python
+    image: python:3.10
     commands:
       - pip install poetry
       - poetry export -f requirements.txt --output requirements.txt --without-hashes --with dev
       - pip install requirements.txt -i https://pypi.douban.com/simple
       - mkdocs build
   - name: build-dist
-    image: node:18
+    image: python:18
     commands:
       - yarn build
       - tar -czvf wedoc.tar.gz ./site
@@ -61,7 +61,3 @@ steps:
       status: [failure, success]
 trigger:
   branch: master
-volumes:
-  - name: cache
-    host:
-      path: /tmp/cache

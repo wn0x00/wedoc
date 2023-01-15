@@ -16,7 +16,7 @@ keywords = ["wework", "sheet"]
 "Bug Tracker" = "https://github.com/wn0x00/wedoc/issues"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.7"
 requests = "^2.28.2"
 
 
