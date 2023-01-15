@@ -43,7 +43,7 @@ steps:
       key:
         from_secret: ssh_key
       script:
-        - cd /data/www/
+        - cd /data/www/wedoc
         - tar xf wedoc.tar.gz
         - rm -rf wedoc.tar.gz
   - name: dingtalk
