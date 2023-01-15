@@ -21,44 +21,44 @@ steps:
     image: node:18
     commands:
       - yarn build
-      - tar -czvf pm_acro.tar.gz ./dist
-  # - name: scp files
-  #   image: appleboy/drone-scp
-  #   settings:
-  #     host:
-  #       from_secret: ssh_host
-  #     username:
-  #       from_secret: ssh_user
-  #     port: 22
-  #     key:
-  #       from_secret: ssh_key
-  #     target:
-  #       -  /data/www/wndoc_web
-  #     source:
-  #       - pm_acro.tar.gz
-  # - name: untar file
-  #   image: appleboy/drone-ssh
-  #   settings:
-  #     host:
-  #       from_secret: ssh_host
-  #     username:
-  #       from_secret: ssh_user
-  #     port: 22
-  #     key:
-  #       from_secret: ssh_key
-  #     script:
-  #       - cd  /data/www/wndoc_web
-  #       - tar -xzf pm_acro.tar.gz
-  #       - rm -rf pm_acro.tar.gz
-  # - name: dingtalk
-  #   image: lddsb/drone-dingtalk-message
-  #   settings:
-  #     token:
-  #       from_secret: dingtalk_token
-  #     type: markdown
-  #     message_color: true
-  #   when:
-  #     status: [failure, success]
+      - tar -czvf wedoc.tar.gz ./site
+  - name: scp files
+    image: appleboy/drone-scp
+    settings:
+      host:
+        from_secret: ssh_host
+      username:
+        from_secret: ssh_user
+      port: 22
+      key:
+        from_secret: ssh_key
+      target:
+        -  /data/www/wedoc
+      source:
+        - wedoc.tar.gz
+  - name: untar file
+    image: appleboy/drone-ssh
+    settings:
+      host:
+        from_secret: ssh_host
+      username:
+        from_secret: ssh_user
+      port: 22
+      key:
+        from_secret: ssh_key
+      script:
+        - cd  /data/www/wedoc.tar.gz
+        - tar -xzf wedoc.tar.gz
+        - rm -rf wedoc.tar.gz
+  - name: dingtalk
+    image: lddsb/drone-dingtalk-message
+    settings:
+      token:
+        from_secret: dingtalk_token
+      type: markdown
+      message_color: true
+    when:
+      status: [failure, success]
 trigger:
   branch: master
 volumes:
