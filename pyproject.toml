@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wedoc"
-version = "0.1.1"
+version = "0.1.2"
 description = ""
 authors = ["wn <320753691@qq.com>"]
 readme = "README.md"
