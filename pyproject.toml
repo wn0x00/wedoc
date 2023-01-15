@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "wework-sheet"
+name = "wedoc"
 version = "0.1.0"
 description = ""
 authors = ["wn <320753691@qq.com>"]
 readme = "README.md"
-packages = [{include = "wework_sheet"}]
+packages = [{include = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"

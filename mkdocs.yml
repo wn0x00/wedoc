@@ -2,3 +2,13 @@ site_name: Wework Spreadsheet
 
 theme:
   name: material
+  language: zh
+  features:
+    - navigation.footer
+nav:
+  - 概述: index.md
+  - 教程:
+    - 企业微信创建应用: weworkapp.md
+  - 指南: guides.md
+  - FAQ: faq.md
+  - 疑难解答: troubleshooting.md
