@@ -1,0 +1,67 @@
+---
+kind: pipeline
+type: docker
+name: dev
+clone:
+  disable: true
+steps:
+  - name: skip_tls_clone
+    image: plugins/git
+    settings:
+      depth: 10
+      skip_verify: true
+  - name:
+    image: python
+    commands:
+      - pip install poetry
+      - poetry export -f requirements.txt --output requirements.txt --without-hashes --with dev
+      - pip install requirements.txt -i https://pypi.douban.com/simple
+      - mkdocs build
+  - name: build-dist
+    image: node:18
+    commands:
+      - yarn build
+      - tar -czvf pm_acro.tar.gz ./dist
+  # - name: scp files
+  #   image: appleboy/drone-scp
+  #   settings:
+  #     host:
+  #       from_secret: ssh_host
+  #     username:
+  #       from_secret: ssh_user
+  #     port: 22
+  #     key:
+  #       from_secret: ssh_key
+  #     target:
+  #       -  /data/www/wndoc_web
+  #     source:
+  #       - pm_acro.tar.gz
+  # - name: untar file
+  #   image: appleboy/drone-ssh
+  #   settings:
+  #     host:
+  #       from_secret: ssh_host
+  #     username:
+  #       from_secret: ssh_user
+  #     port: 22
+  #     key:
+  #       from_secret: ssh_key
+  #     script:
+  #       - cd  /data/www/wndoc_web
+  #       - tar -xzf pm_acro.tar.gz
+  #       - rm -rf pm_acro.tar.gz
+  # - name: dingtalk
+  #   image: lddsb/drone-dingtalk-message
+  #   settings:
+  #     token:
+  #       from_secret: dingtalk_token
+  #     type: markdown
+  #     message_color: true
+  #   when:
+  #     status: [failure, success]
+trigger:
+  branch: master
+volumes:
+  - name: cache
+    host:
+      path: /tmp/cache
