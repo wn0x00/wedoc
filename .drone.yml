@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: docker
-name: dev
+name: doc
 clone:
   disable: true
 steps:
@@ -29,7 +29,7 @@ steps:
       key:
         from_secret: ssh_key
       target:
-        -  /data/www/wedoc
+        - /data/www/wedoc
       source:
         - wedoc.tar.gz
   - name: untar file
@@ -55,5 +55,44 @@ steps:
       message_color: true
     when:
       status: [failure, success]
+trigger:
+  branch: master
+
+---
+kind: pipeline
+type: docker
+name: build and publish
+clone:
+  disable: true
+steps:
+  - name: skip_tls_clone
+    image: plugins/git
+    settings:
+      depth: 10
+      skip_verify: true
+  - name: python
+    image: python:3.10
+    commands:
+      - pip install poetry -i https://pypi.douban.com/simple
+      - poetry build
+
+  - name: pypi_publish
+    image: plugins/pypi
+    settings:
+      username:
+        from_secret: pypi_user
+      password:
+        from_secret: pypi_password
+      skip_build: false
+  - name: dingtalk
+    image: lddsb/drone-dingtalk-message
+    settings:
+      token:
+        from_secret: dingtalk_token
+      type: markdown
+      message_color: true
+    when:
+      status: [failure, success]
+
 trigger:
   branch: master
