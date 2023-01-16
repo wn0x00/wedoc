@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wedoc"
-version = "0.1.14"
+version = "0.1.16"
 description = "企业微信文档接口, 包括文档的创建, 删除, 以及表格的操作"
 authors = ["wn <320753691@qq.com>"]
 readme = "README.md"

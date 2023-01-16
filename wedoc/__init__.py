@@ -5,7 +5,7 @@ from wedoc.client import WedocClientBase
 
 class WedocClient(WedocClientBase):
     doc: Document = Document()
-    wb: Spreadsheet = Spreadsheet()
+    workbook: Spreadsheet = Spreadsheet()
 
     def __init__(self, corpid, corpsecret) -> None:
         """

@@ -17,7 +17,7 @@ class WedocClientBase:
         api_endpoints = inspect.getmembers(self, _is_api_endpoint)
         for name, api in api_endpoints:
             api_cls = type(api)
-            api = api_cls(self)
+            api = api_cls(client=self)
             setattr(self, name, api)
         return self
 

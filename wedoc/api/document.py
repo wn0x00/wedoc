@@ -29,6 +29,7 @@ class Document(WedocApiBase):
         pyload = {
             "doc_type": doc_type,
             "doc_name": doc_name,
+            "admin_users": admin_users,
         }
 
         res = self.request("post", api, pyload=pyload)

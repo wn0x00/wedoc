@@ -12,3 +12,6 @@ nav:
   - 指南: guides.md
   - FAQ: faq.md
   - 疑难解答: troubleshooting.md
+  - 参考:
+      - 参考文档: ref.md
+      - API 接口: api.md
