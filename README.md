@@ -1,5 +1,10 @@
 # 企业微信文档接口
 
+[文档](https://wedoc.woni.link)
+
+[PYPI](https://pypi.org/project/wedoc)
+
+
 ## 案例
 
 ```python
