@@ -1,10 +1,19 @@
 site_name: Wedoc
+site_url: https://wedoc.woni.link/
+site_author: Wn0x00
+repo_url: https://github.com/wn0x00/wedoc
+repo_name: wn0x00/wedoc
+
+copyright: Copyright &copy; 2023 - 2023 Wn0x00
 
 theme:
   name: material
   language: zh
+  icon:
+    repo: fontawesome/brands/git-alt
   features:
     - navigation.footer
+    - navigation.path
 nav:
   - 概述: index.md
   - 教程: guides.md
