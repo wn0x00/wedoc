@@ -1,5 +1,7 @@
 # 企业微信文档接口
 
+> 目前仍属于 beta 阶段, 生产环境使用请谨慎
+
 [文档](https://wedoc.woni.link)
 
 [PYPI](https://pypi.org/project/wedoc)
