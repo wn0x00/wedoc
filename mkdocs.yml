@@ -11,9 +11,26 @@ theme:
   language: zh
   icon:
     repo: fontawesome/brands/git-alt
+  palette:
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
   features:
     - navigation.footer
     - navigation.path
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
 nav:
   - 概述: index.md
   - 教程: guides.md
