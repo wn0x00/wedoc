@@ -7,9 +7,9 @@ theme:
     - navigation.footer
 nav:
   - 概述: index.md
-  - 教程:
-    - 企业微信创建应用: weworkapp.md
-  - 指南: guides.md
+  - 教程: guides.md
+  - 指南:
+      - 企业微信创建应用: weworkapp.md
   - FAQ: faq.md
   - 疑难解答: troubleshooting.md
   - 参考:

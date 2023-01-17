@@ -1,5 +1,7 @@
 # 企业微信文档接口
 
+[![asciicast](https://asciinema.org/a/s0wzCLDDr6WqcoyhRpwflxbBl.svg)](https://asciinema.org/a/s0wzCLDDr6WqcoyhRpwflxbBl)
+
 ## 案例
 
 ```python
