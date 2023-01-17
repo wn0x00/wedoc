@@ -1,5 +1,5 @@
 from wedoc.api.base import WedocApiBase
-from wedoc.utils import column_index_from_string
+from wedoc.utils import column_index_from_string, get_column_letter
 
 
 class Spreadsheet(WedocApiBase):
@@ -24,6 +24,20 @@ class Spreadsheet(WedocApiBase):
         pyload = {"docid": self.docid}
         res = self.request("post", api, pyload=pyload)
         return res.get("properties")
+
+    def get_sheet_property(self, sheet_id: str, property: str):
+        """
+        通过 sheet_id 找到 sheet 页对应的属性
+
+        :param sheet_id:
+        :param property:
+        :return:
+        """
+        for item in self.sheet_metadata:
+            if item.get("sheet_id") == sheet_id:
+                return item.get(property)
+        else:
+            raise ValueError("找不到 %s sheet_id 对应的 sheet 页" % property)
 
     def get_sheet_range_data(self, pyload):
         """
@@ -228,17 +242,81 @@ class Spreadsheet(WedocApiBase):
     def set_column(self):
         pass
 
-    def get_row(self):
-        pass
+    def get_row(self, row, sheet_name=None) -> list:
+        """
+        读取行内容
+        """
+        sheet_name = sheet_name if sheet_name else self.get_active_sheet()
+        sheet_id = self.get_sheet_id(sheet_name)
+        column_count = self.get_sheet_property(sheet_id, "column_count")
 
-    def get_column(self):
-        pass
+        if column_count == 0:
+            return []
 
-    def delete_row(self):
-        pass
+        pyload = {
+            "docid": self.docid,
+            "sheet_id": sheet_id,
+            "range": f"A{row}:{get_column_letter(column_count)}{row}",
+        }
+        res = self.get_sheet_range_data(pyload=pyload)
+        return res
 
-    def delete_column(self):
-        pass
+    def get_column(self, column, sheet_name=None):
+        sheet_name = sheet_name if sheet_name else self.get_active_sheet()
+        sheet_id = self.get_sheet_id(sheet_name)
+        row_count = self.get_sheet_property(sheet_id, "row_count")
+        if row_count == 0:
+            return []
+
+        pyload = {
+            "docid": self.docid,
+            "sheet_id": sheet_id,
+            "range": f"{column}1:{column}{row_count}",
+        }
+        res = self.get_sheet_range_data(pyload=pyload)
+        return res
+
+    def delete_row(self, start_index, end_index, sheet_name=None):
+        """
+        删除行
+        """
+        sheet_name = sheet_name if sheet_name else self.get_active_sheet()
+        sheet_id = self.get_sheet_id(sheet_name)
+        pyload = {
+            "docid": self.docid,
+            "requests": [
+                {
+                    "delete_dimension_request": {
+                        "sheet_id": sheet_id,
+                        "dimension": "ROW",
+                        "start_index": start_index,
+                        "end_index": end_index,
+                    }
+                },
+            ],
+        }
+        res = self.batch_update(pyload)
+        return res
+
+    def delete_column(self, start_index, end_index, sheet_name=None):
+        """删除列"""
+        sheet_name = sheet_name if sheet_name else self.get_active_sheet()
+        sheet_id = self.get_sheet_id(sheet_name)
+        pyload = {
+            "docid": self.docid,
+            "requests": [
+                {
+                    "delete_dimension_request": {
+                        "sheet_id": sheet_id,
+                        "dimension": "COLUMN",
+                        "start_index": start_index,
+                        "end_index": end_index,
+                    }
+                },
+            ],
+        }
+        res = self.batch_update(pyload)
+        return res
 
     def __call__(self, docid):
         """将表格实例化"""
