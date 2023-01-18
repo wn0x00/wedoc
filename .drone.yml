@@ -96,4 +96,8 @@ steps:
       status: [failure, success]
 
 trigger:
-  branch: master
+  branch:
+    - master
+  ref:
+    include:
+    - refs/tags/*
