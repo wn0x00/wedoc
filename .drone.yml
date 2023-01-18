@@ -83,7 +83,7 @@ steps:
         from_secret: pypi_user
       password:
         from_secret: pypi_password
-      skip_build: false
+      skip_build: true
   - name: dingtalk
     image: lddsb/drone-dingtalk-message
     settings:
