@@ -1,11 +1,13 @@
 from wedoc.api import Document
 from wedoc.api import Spreadsheet
+from wedoc.api import Form
 from wedoc.client import WedocClientBase
 
 
 class WedocClient(WedocClientBase):
     doc: Document = Document()
     workbook: Spreadsheet = Spreadsheet()
+    form: Form = Form()
 
     def __init__(self, corpid, corpsecret) -> None:
         """
