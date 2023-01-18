@@ -75,6 +75,7 @@ steps:
     commands:
       - pip install poetry -i https://pypi.douban.com/simple
       - poetry build
+      - ls dist
 
   - name: pypi_publish
     image: plugins/pypi
