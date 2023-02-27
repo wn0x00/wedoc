@@ -1,3 +1,6 @@
+import json
+
+
 from wedoc.api.base import WedocApiBase
 from wedoc.utils import column_index_from_string, get_column_letter
 
@@ -187,6 +190,13 @@ class Spreadsheet(WedocApiBase):
             "range": f"{column}{row}:{column}{row}",
         }
         res = self.get_sheet_range_data(pyload=pyload)
+        res = (
+            res.get("grid_data")
+            .get("rows")[0]
+            .get("values")[0]
+            .get("cell_value")
+            .get("text")
+        )
         return res
 
     def set_cell(self, row, column, value, sheet_name=None):
@@ -228,19 +238,104 @@ class Spreadsheet(WedocApiBase):
         sheet_id = self.get_sheet_id(sheet_name)
         pyload = {"docid": self.docid, "sheet_id": sheet_id, "range": des_range}
         res = self.get_sheet_range_data(pyload=pyload)
+
+        data = []
+        for row_data in res.get("grid_data").get("rows"):
+            row_tmp_data = []
+            for column_data in row_data.get("values"):
+                cell_value = column_data.get("cell_value").get("text")
+                row_tmp_data.append(cell_value)
+            data.append(row_tmp_data)
+
+        return data
+
+    def set_range(self, row, column, data, sheet_name=None):
+        """
+        设置区域内容
+        """
+        sheet_name = sheet_name if sheet_name else self.get_active_sheet()
+        sheet_id = self.get_sheet_id(sheet_name)
+
+        range_data = []
+
+        for row_item in data:
+            tmp_row = []
+            for column_item in row_item:
+                tmp_row.append({"cell_value": {"text": column_item}})
+            range_data.append({"values": tmp_row})
+
+        pyload = {
+            "docid": self.docid,
+            "requests": [
+                {
+                    "update_range_request": {
+                        "sheet_id": sheet_id,
+                        "grid_data": {
+                            "start_row": int(row) - 1,
+                            "start_column": column_index_from_string(column) - 1,
+                            "rows": range_data,
+                        },
+                    }
+                },
+            ],
+        }
+        print(json.dumps(pyload))
+
+        res = self.batch_update(pyload)
         return res
 
-    def set_range(self, sheet_name=None):
+    def set_row(self, row, data, start_column, sheet_name=None):
         """
-        读取区域数据
+        设置列内容
         """
-        pass
+        sheet_name = sheet_name if sheet_name else self.get_active_sheet()
+        sheet_id = self.get_sheet_id(sheet_name)
 
-    def set_row(self):
-        pass
+        row_data = [{"cell_value": {"text": item}} for item in data]
 
-    def set_column(self):
-        pass
+        pyload = {
+            "docid": self.docid,
+            "requests": [
+                {
+                    "update_range_request": {
+                        "sheet_id": sheet_id,
+                        "grid_data": {
+                            "start_row": int(row) - 1,
+                            "start_column": column_index_from_string(start_column) - 1,
+                            "rows": [{"values": row_data}],
+                        },
+                    }
+                },
+            ],
+        }
+        print(json.dumps(pyload))
+
+        res = self.batch_update(pyload)
+        return res
+
+    def set_column(self, column, data, start_row, sheet_name=None):
+        sheet_name = sheet_name if sheet_name else self.get_active_sheet()
+        sheet_id = self.get_sheet_id(sheet_name)
+
+        column_data = [{"values": [{"cell_value": {"text": item}}]} for item in data]
+
+        pyload = {
+            "docid": self.docid,
+            "requests": [
+                {
+                    "update_range_request": {
+                        "sheet_id": sheet_id,
+                        "grid_data": {
+                            "start_row": int(start_row) - 1,
+                            "start_column": column_index_from_string(column) - 1,
+                            "rows": column_data,
+                        },
+                    }
+                },
+            ],
+        }
+        res = self.batch_update(pyload)
+        return res
 
     def get_row(self, row, sheet_name=None) -> list:
         """
@@ -259,7 +354,16 @@ class Spreadsheet(WedocApiBase):
             "range": f"A{row}:{get_column_letter(column_count)}{row}",
         }
         res = self.get_sheet_range_data(pyload=pyload)
-        return res
+
+        data = []
+        for row_data in res.get("grid_data").get("rows"):
+            row_tmp_data = []
+            for column_data in row_data.get("values"):
+                cell_value = column_data.get("cell_value").get("text")
+                row_tmp_data.append(cell_value)
+            data.append(row_tmp_data)
+
+        return data[0]
 
     def get_column(self, column, sheet_name=None):
         sheet_name = sheet_name if sheet_name else self.get_active_sheet()
@@ -274,7 +378,18 @@ class Spreadsheet(WedocApiBase):
             "range": f"{column}1:{column}{row_count}",
         }
         res = self.get_sheet_range_data(pyload=pyload)
-        return res
+
+        res = self.get_sheet_range_data(pyload=pyload)
+
+        data = []
+        for row_data in res.get("grid_data").get("rows"):
+            row_tmp_data = []
+            for column_data in row_data.get("values"):
+                cell_value = column_data.get("cell_value").get("text")
+                row_tmp_data.append(cell_value)
+            data.append(row_tmp_data)
+
+        return [item[0] for item in data]
 
     def delete_row(self, start_index, end_index, sheet_name=None):
         """
