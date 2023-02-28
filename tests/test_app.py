@@ -64,6 +64,10 @@ class WedocClientBase(unittest.TestCase):
         res = self.wb.get_range("A1:B2")
         print(res)
 
+    def test_append_row(self):
+        res = self.wb.append_row(["1", "2", "3"])
+        print(res)
+
 
 if __name__ == "__main__":
     unittest.main()

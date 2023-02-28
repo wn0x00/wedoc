@@ -279,7 +279,6 @@ class Spreadsheet(WedocApiBase):
                 },
             ],
         }
-        print(json.dumps(pyload))
 
         res = self.batch_update(pyload)
         return res
@@ -308,7 +307,6 @@ class Spreadsheet(WedocApiBase):
                 },
             ],
         }
-        print(json.dumps(pyload))
 
         res = self.batch_update(pyload)
         return res
@@ -390,6 +388,31 @@ class Spreadsheet(WedocApiBase):
             data.append(row_tmp_data)
 
         return [item[0] for item in data]
+
+    def append_row(self, data, sheet_name=None):
+        sheet_name = sheet_name if sheet_name else self.get_active_sheet()
+        sheet_id = self.get_sheet_id(sheet_name)
+        row_count = self.get_row_count(sheet_name)
+
+        row_data = [{"cell_value": {"text": item}} for item in data]
+
+        pyload = {
+            "docid": self.docid,
+            "requests": [
+                {
+                    "update_range_request": {
+                        "sheet_id": sheet_id,
+                        "grid_data": {
+                            "start_row": row_count,
+                            "start_column": 0,
+                            "rows": [{"values": row_data}],
+                        },
+                    }
+                },
+            ],
+        }
+        res = self.batch_update(pyload)
+        return res
 
     def delete_row(self, start_index, end_index, sheet_name=None):
         """
