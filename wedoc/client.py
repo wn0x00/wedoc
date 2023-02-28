@@ -57,7 +57,10 @@ class WedocClientBase:
         res = requests.request(
             method, url, params=params, data=json.dumps(pyload), headers=headers
         )
-        return res.json()
+        res = res.json()
+        if res.get("errcode") != 0:
+            raise ValueError(res.get("errmsg"))
+        return res
 
 
 if __name__ == "__main__":
