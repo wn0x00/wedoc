@@ -41,3 +41,13 @@ nav:
   - 参考:
       - 参考文档: ref.md
       - API 接口: api.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          import:
+            - https://docs.python-requests.org/en/master/objects.inv
+          options:
+            do_something: true

@@ -12,15 +12,9 @@ class Spreadsheet(WedocApiBase):
         self.sheet_metadata = None
 
     def get_sheet_properties(self) -> dict:
-        """
-        获取表格行列信息
+        """获取表格行列信息
 
         使用示例
-
-        >>> from wedoc import WedocClient
-        >>> client = WedocClient("corpid", "corpsecret")
-        >>> wb = client.workbook("docid")
-        >>> wb.get_sheet_properties()
         """
 
         api = "/wedoc/spreadsheet/get_sheet_properties"
@@ -437,7 +431,12 @@ class Spreadsheet(WedocApiBase):
         return res
 
     def delete_column(self, start_index, end_index, sheet_name=None):
-        """删除列"""
+        """删除列
+
+        Attributes:
+            start_index (str): 开始删除的列名. 默认为空.
+
+        """
         sheet_name = sheet_name if sheet_name else self.get_active_sheet()
         sheet_id = self.get_sheet_id(sheet_name)
         pyload = {

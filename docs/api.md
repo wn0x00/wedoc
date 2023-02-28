@@ -2,19 +2,8 @@
 
 ## 文档接口
 
-- 创建文档
-- 重命名文档
-- 删除文档
-- 获取文档基础信息
+::: wedoc.api.document.Document
 
 ## 表格接口
 
-- 获取表格行列信息
-- 获取表格数据
-- 编辑表格内容
-- 创建 sheet 页
-- 删除 sheet 页
-- 读取总行数
-- 读取总列数
-- 读取单元格内容
-- 设置单元格内容
+::: wedoc.api.spreadsheet.Spreadsheet

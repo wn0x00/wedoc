@@ -1,5 +1,6 @@
 import os
 import json
+import time
 import requests
 import tempfile
 import inspect
@@ -33,14 +34,25 @@ class WedocClientBase:
         wework_app_token_path = os.path.join(tmp_path, "wework_app_token")
 
         if not os.path.exists(wework_app_token_path):
-            access_token = self.get_access_token().get("access_token")
-            token_dict = {"access_token": access_token}
-            with open(wework_app_token_path, "w") as f:
-                json.dump(token_dict, f)
+            return self.set_local_session()
+
         with open(wework_app_token_path) as f:
             token_dict = json.load(f)
-            if token_dict.get("access_token"):
+            if int(time.time()) > token_dict.get("expires_in_timestamp"):
+                return self.set_local_session()
+            else:
                 return token_dict.get("access_token")
+
+    def set_local_session(self):
+        tmp_path = tempfile.gettempdir()
+        wework_app_token_path = os.path.join(tmp_path, "wework_app_token")
+
+        access_token = self.get_access_token().get("access_token")
+        token_dict = {"access_token": access_token}
+        token_dict["expires_in_timestamp"] = int(time.time()) + 7000
+        with open(wework_app_token_path, "w") as f:
+            json.dump(token_dict, f)
+        return access_token
 
     def get_access_token(self):
         """获取企业微信应用的 access_token"""
@@ -52,7 +64,7 @@ class WedocClientBase:
 
     def request(self, method, api, params="", pyload={}):
         """发送请求"""
-        url = f"{self.base_url}{api}?access_token={self.access_token}"
+        url = f"{self.base_url}{api}?access_token={self.get_local_session()}"
         headers = {"Content-Type": "application/json"}
         res = requests.request(
             method, url, params=params, data=json.dumps(pyload), headers=headers
