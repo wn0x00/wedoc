@@ -56,7 +56,8 @@ steps:
     when:
       status: [failure, success]
 trigger:
-  branch: master
+  branch:
+    - master
 
 ---
 kind: pipeline
@@ -98,6 +99,6 @@ steps:
 trigger:
   branch:
     - master
-  ref:
-    include:
-    - refs/tags/*
+  # ref:
+  #   include:
+  #   - refs/tags/*
